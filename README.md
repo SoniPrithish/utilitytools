@@ -63,20 +63,6 @@ npm run build
 npm run start
 ```
 
-## Deployment
-
-### Deploy to Vercel
-
-The easiest way to deploy is using [Vercel](https://vercel.com):
-
-1. Push your code to GitHub
-2. Import the repository on [Vercel](https://vercel.com/new)
-3. Click Deploy
-
-No environment variables required - everything runs client-side!
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/SoniPrithish/utilitytools)
-
 ## Privacy
 
 All file processing happens **entirely in your browser**. Your files are never uploaded to any server. This ensures:
