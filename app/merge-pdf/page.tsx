@@ -90,8 +90,13 @@ export default function MergePdfPage() {
         pages.forEach((page) => mergedPdf.addPage(page));
       }
 
-      const mergedPdfBytes = await mergedPdf.save();
-      const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+      const mergedPdfBytes = await mergedPdf.save(); // Uint8Array
+      // Ensure we pass an ArrayBuffer to Blob to satisfy TS in strict builds
+      const mergedBuffer = mergedPdfBytes.buffer.slice(
+        mergedPdfBytes.byteOffset,
+        mergedPdfBytes.byteOffset + mergedPdfBytes.byteLength
+      );
+      const blob = new Blob([mergedBuffer], { type: 'application/pdf' });
       downloadFile(blob, 'merged.pdf');
     } catch (err) {
       console.error('Error merging PDFs:', err);
