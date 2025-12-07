@@ -20,10 +20,12 @@ export default function ConvertImagePage() {
   const [isConverting, setIsConverting] = useState(false);
   const [progress, setProgress] = useState(0);
   const [results, setResults] = useState<ConvertedImage[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   const handleFilesSelected = (selectedFiles: File[]) => {
     setFiles(selectedFiles);
     setResults([]);
+    setError(null);
   };
 
   const convertImages = async () => {
@@ -31,7 +33,9 @@ export default function ConvertImagePage() {
 
     setIsConverting(true);
     setProgress(0);
+    setError(null);
     const converted: ConvertedImage[] = [];
+    let hasErrors = false;
 
     for (let i = 0; i < files.length; i++) {
       try {
@@ -39,9 +43,16 @@ export default function ConvertImagePage() {
         const result = await convertImage(file, outputFormat, quality);
         converted.push(result);
         setProgress(Math.round(((i + 1) / files.length) * 100));
-      } catch (error) {
-        console.error(`Error converting ${files[i].name}:`, error);
+      } catch (err) {
+        console.error(`Error converting ${files[i].name}:`, err);
+        hasErrors = true;
       }
+    }
+
+    if (converted.length === 0 && hasErrors) {
+      setError('Failed to convert images. Please make sure you selected valid image files.');
+    } else if (hasErrors) {
+      setError(`Some images could not be converted. ${converted.length} of ${files.length} succeeded.`);
     }
 
     setResults(converted);
@@ -142,7 +153,13 @@ export default function ConvertImagePage() {
         sublabel="PNG, JPG, WebP, GIF, BMP - up to 20 files"
       />
 
-      {files.length > 0 && results.length === 0 && (
+      {error && (
+        <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-sm text-red-600">{error}</p>
+        </div>
+      )}
+
+      {files.length > 0 && results.length === 0 && !isConverting && (
         <div className="mt-8 p-6 bg-white rounded-xl border border-gray-200">
           <h3 className="text-lg font-medium text-gray-900 mb-4">Conversion Settings</h3>
           

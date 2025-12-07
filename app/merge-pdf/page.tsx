@@ -16,10 +16,13 @@ export default function MergePdfPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isMerging, setIsMerging] = useState(false);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleFilesSelected = async (files: File[]) => {
     setIsLoading(true);
+    setError(null);
     const newPdfs: PdfFile[] = [];
+    let failedCount = 0;
 
     for (const file of files) {
       try {
@@ -31,9 +34,16 @@ export default function MergePdfPage() {
           file,
           pageCount: pdf.getPageCount(),
         });
-      } catch (error) {
-        console.error(`Error loading ${file.name}:`, error);
+      } catch (err) {
+        console.error(`Error loading ${file.name}:`, err);
+        failedCount++;
       }
+    }
+
+    if (failedCount > 0 && newPdfs.length === 0) {
+      setError('Failed to load PDFs. Please make sure you selected valid PDF files.');
+    } else if (failedCount > 0) {
+      setError(`${failedCount} file(s) could not be loaded.`);
     }
 
     setPdfs((prev) => [...prev, ...newPdfs]);
@@ -68,6 +78,7 @@ export default function MergePdfPage() {
     if (pdfs.length < 2) return;
 
     setIsMerging(true);
+    setError(null);
 
     try {
       const mergedPdf = await PDFDocument.create();
@@ -82,8 +93,9 @@ export default function MergePdfPage() {
       const mergedPdfBytes = await mergedPdf.save();
       const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
       downloadFile(blob, 'merged.pdf');
-    } catch (error) {
-      console.error('Error merging PDFs:', error);
+    } catch (err) {
+      console.error('Error merging PDFs:', err);
+      setError('Failed to merge PDFs. Please try again.');
     }
 
     setIsMerging(false);
@@ -113,6 +125,12 @@ export default function MergePdfPage() {
       {isLoading && (
         <div className="mt-6 text-center text-gray-600">
           Loading PDFs...
+        </div>
+      )}
+
+      {error && (
+        <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-sm text-red-600">{error}</p>
         </div>
       )}
 

@@ -19,10 +19,12 @@ export default function CompressImagePage() {
   const [isCompressing, setIsCompressing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [results, setResults] = useState<CompressedImage[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   const handleFilesSelected = (selectedFiles: File[]) => {
     setFiles(selectedFiles);
     setResults([]);
+    setError(null);
   };
 
   const compressImages = async () => {
@@ -30,6 +32,7 @@ export default function CompressImagePage() {
 
     setIsCompressing(true);
     setProgress(0);
+    setError(null);
     const compressed: CompressedImage[] = [];
 
     const options = {
@@ -39,6 +42,7 @@ export default function CompressImagePage() {
       useWebWorker: true,
     };
 
+    let hasErrors = false;
     for (let i = 0; i < files.length; i++) {
       try {
         const file = files[i];
@@ -52,9 +56,16 @@ export default function CompressImagePage() {
         });
 
         setProgress(Math.round(((i + 1) / files.length) * 100));
-      } catch (error) {
-        console.error(`Error compressing ${files[i].name}:`, error);
+      } catch (err) {
+        console.error(`Error compressing ${files[i].name}:`, err);
+        hasErrors = true;
       }
+    }
+
+    if (compressed.length === 0 && hasErrors) {
+      setError('Failed to compress images. Please make sure you selected valid image files.');
+    } else if (hasErrors) {
+      setError(`Some images could not be compressed. ${compressed.length} of ${files.length} succeeded.`);
     }
 
     setResults(compressed);
@@ -77,6 +88,8 @@ export default function CompressImagePage() {
     (acc, r) => acc + (r.originalSize - r.compressedSize),
     0
   );
+  const totalOriginalSize = results.reduce((a, r) => a + r.originalSize, 0);
+  const savingsPercent = totalOriginalSize > 0 ? Math.round((totalSaved / totalOriginalSize) * 100) : 0;
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
@@ -96,7 +109,13 @@ export default function CompressImagePage() {
         sublabel="PNG, JPG, WebP - up to 20 files"
       />
 
-      {files.length > 0 && results.length === 0 && (
+      {error && (
+        <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-sm text-red-600">{error}</p>
+        </div>
+      )}
+
+      {files.length > 0 && results.length === 0 && !isCompressing && (
         <div className="mt-8 p-6 bg-white rounded-xl border border-gray-200">
           <h3 className="text-lg font-medium text-gray-900 mb-4">Compression Settings</h3>
           
@@ -156,7 +175,7 @@ export default function CompressImagePage() {
             <div>
               <h3 className="text-lg font-medium text-gray-900">Compression Complete</h3>
               <p className="text-sm text-green-600">
-                Total saved: {formatFileSize(totalSaved)} ({Math.round((totalSaved / results.reduce((a, r) => a + r.originalSize, 0)) * 100)}%)
+                Total saved: {formatFileSize(totalSaved)} ({savingsPercent}%)
               </p>
             </div>
             <button

@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { jsPDF } from 'jspdf';
 import FileDropzone from '@/components/FileDropzone';
-import { downloadFile, removeFileExtension, formatFileSize } from '@/lib/utils';
+import { downloadFile, removeFileExtension } from '@/lib/utils';
 
 interface ImageFile {
   id: string;
@@ -19,6 +19,7 @@ export default function ImageToPdfPage() {
   const [orientation, setOrientation] = useState<'portrait' | 'landscape'>('portrait');
   const [isConverting, setIsConverting] = useState(false);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleFilesSelected = async (files: File[]) => {
     const newImages: ImageFile[] = [];
@@ -83,6 +84,7 @@ export default function ImageToPdfPage() {
     if (images.length === 0) return;
 
     setIsConverting(true);
+    setError(null);
 
     try {
       let pdf: jsPDF;
@@ -151,8 +153,9 @@ export default function ImageToPdfPage() {
         : 'combined_images.pdf';
       
       downloadFile(pdfBlob, filename);
-    } catch (error) {
-      console.error('Error creating PDF:', error);
+    } catch (err) {
+      console.error('Error creating PDF:', err);
+      setError('Failed to create PDF. Please try again.');
     }
 
     setIsConverting(false);
@@ -175,6 +178,12 @@ export default function ImageToPdfPage() {
         label="Drop images here"
         sublabel="PNG, JPG, WebP - up to 50 images"
       />
+
+      {error && (
+        <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-sm text-red-600">{error}</p>
+        </div>
+      )}
 
       {images.length > 0 && (
         <>

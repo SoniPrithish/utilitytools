@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import * as pdfjsLib from 'pdfjs-dist';
 import FileDropzone from '@/components/FileDropzone';
 import { downloadFile, removeFileExtension } from '@/lib/utils';
@@ -24,13 +24,13 @@ export default function PdfToImagePage() {
   const [isConverting, setIsConverting] = useState(false);
   const [progress, setProgress] = useState(0);
   const [pages, setPages] = useState<ConvertedPage[]>([]);
-  const [totalPages, setTotalPages] = useState(0);
+  const [error, setError] = useState<string | null>(null);
 
   const handleFilesSelected = (files: File[]) => {
     if (files.length > 0) {
       setFile(files[0]);
       setPages([]);
-      setTotalPages(0);
+      setError(null);
     }
   };
 
@@ -40,12 +40,12 @@ export default function PdfToImagePage() {
     setIsConverting(true);
     setProgress(0);
     setPages([]);
+    setError(null);
 
     try {
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
       const numPages = pdf.numPages;
-      setTotalPages(numPages);
 
       const convertedPages: ConvertedPage[] = [];
 
@@ -81,8 +81,9 @@ export default function PdfToImagePage() {
       }
 
       setPages(convertedPages);
-    } catch (error) {
-      console.error('Error converting PDF:', error);
+    } catch (err) {
+      console.error('Error converting PDF:', err);
+      setError('Failed to convert PDF. Please make sure the file is a valid PDF.');
     }
 
     setIsConverting(false);
@@ -126,7 +127,13 @@ export default function PdfToImagePage() {
         sublabel="PDF files only"
       />
 
-      {file && pages.length === 0 && (
+      {error && (
+        <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-sm text-red-600">{error}</p>
+        </div>
+      )}
+
+      {file && pages.length === 0 && !error && (
         <div className="mt-8 p-6 bg-white rounded-xl border border-gray-200">
           <h3 className="text-lg font-medium text-gray-900 mb-4">Conversion Settings</h3>
           
