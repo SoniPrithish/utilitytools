@@ -215,6 +215,16 @@ export default function MergePdfPage() {
               ? 'Add at least 2 PDFs to merge'
               : `Merge ${pdfs.length} PDFs`}
           </button>
+
+          <button
+            onClick={() => {
+              setPdfs([]);
+              setError(null);
+            }}
+            className="w-full mt-3 py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+          >
+            Start over with new files
+          </button>
         </>
       )}
     </div>

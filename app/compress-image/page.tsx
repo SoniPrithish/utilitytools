@@ -40,6 +40,8 @@ export default function CompressImagePage() {
       maxWidthOrHeight: maxWidth,
       initialQuality: quality,
       useWebWorker: true,
+      // Convert to JPEG for better compression when quality is reduced
+      fileType: quality < 1 ? 'image/jpeg' : undefined,
     };
 
     let hasErrors = false;
@@ -48,8 +50,14 @@ export default function CompressImagePage() {
         const file = files[i];
         const compressedFile = await imageCompression(file, options);
         
-        // Use original if compressed is larger (can happen with small/simple images)
-        const finalFile = compressedFile.size < file.size ? compressedFile : file;
+        // Get image dimensions to check if resize was applied
+        const originalImg = await createImageBitmap(file);
+        const compressedImg = await createImageBitmap(compressedFile);
+        const wasResized = compressedImg.width < originalImg.width || compressedImg.height < originalImg.height;
+        
+        // Use original only if: not resized AND compressed is larger AND quality is 100%
+        const shouldKeepOriginal = !wasResized && compressedFile.size >= file.size && quality === 1;
+        const finalFile = shouldKeepOriginal ? file : compressedFile;
         
         compressed.push({
           original: file,

@@ -313,6 +313,16 @@ export default function ImageToPdfPage() {
           >
             {isConverting ? 'Creating PDF...' : 'Create PDF'}
           </button>
+
+          <button
+            onClick={() => {
+              setImages([]);
+              setError(null);
+            }}
+            className="w-full mt-3 py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+          >
+            Start over with new images
+          </button>
         </>
       )}
     </div>
