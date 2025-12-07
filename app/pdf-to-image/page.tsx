@@ -6,9 +6,9 @@ import FileDropzone from '@/components/FileDropzone';
 import { downloadFile, removeFileExtension } from '@/lib/utils';
 import JSZip from 'jszip';
 
-// Set worker path
+// Set worker path - use local worker for reliability
 if (typeof window !== 'undefined') {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+  pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 }
 
 interface ConvertedPage {
