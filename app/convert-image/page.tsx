@@ -92,10 +92,18 @@ export default function ConvertImagePage() {
           fetch(dataUrl)
             .then((res) => res.blob())
             .then((blob) => {
+              // Keep original if converted is larger (unless format changed)
+              const originalExt = file.name.split('.').pop()?.toLowerCase();
+              const targetExt = format === 'jpeg' ? 'jpg' : format;
+              const formatChanged = originalExt !== targetExt && originalExt !== format;
+              
+              const finalBlob = (blob.size > file.size && !formatChanged) ? file : blob;
+              const finalDataUrl = (blob.size > file.size && !formatChanged) ? e.target?.result as string : dataUrl;
+              
               resolve({
                 original: file,
-                converted: blob,
-                dataUrl,
+                converted: finalBlob,
+                dataUrl: finalDataUrl,
               });
             })
             .catch(reject);
@@ -242,15 +250,27 @@ export default function ConvertImagePage() {
             <div>
               <h3 className="text-lg font-medium text-gray-900">Conversion Complete</h3>
               <p className="text-sm text-gray-600">
-                {results.length} images converted to {outputFormat.toUpperCase()}
+                {results.length} image{results.length > 1 ? 's' : ''} converted to {outputFormat.toUpperCase()}
               </p>
             </div>
-            <button
-              onClick={downloadAllAsZip}
-              className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
-            >
-              Download ZIP
-            </button>
+            <div className="flex gap-2">
+              {results.length === 1 && (
+                <button
+                  onClick={() => downloadImage(results[0])}
+                  className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
+                >
+                  Download Image
+                </button>
+              )}
+              {results.length > 1 && (
+                <button
+                  onClick={downloadAllAsZip}
+                  className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
+                >
+                  Download ZIP
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="space-y-3">
