@@ -1,15 +1,12 @@
 'use client';
 
-import { useState } from 'react';
-import * as pdfjsLib from 'pdfjs-dist';
+import { useState, useRef } from 'react';
 import FileDropzone from '@/components/FileDropzone';
 import { downloadFile, removeFileExtension } from '@/lib/utils';
 import JSZip from 'jszip';
 
-// Set worker path - use local worker for reliability
-if (typeof window !== 'undefined') {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
-}
+// pdfjs-dist will be loaded dynamically to avoid SSR issues
+type PDFJSLib = typeof import('pdfjs-dist');
 
 interface ConvertedPage {
   pageNumber: number;
@@ -43,6 +40,10 @@ export default function PdfToImagePage() {
     setError(null);
 
     try {
+      // Dynamically import pdfjs-dist to avoid SSR issues
+      const pdfjsLib = await import('pdfjs-dist');
+      pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+      
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
       const numPages = pdf.numPages;
@@ -61,6 +62,7 @@ export default function PdfToImagePage() {
         await page.render({
           canvasContext: context,
           viewport: viewport,
+          canvas: canvas,
         }).promise;
 
         const mimeType = format === 'png' ? 'image/png' : 'image/jpeg';
