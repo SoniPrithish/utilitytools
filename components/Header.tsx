@@ -8,7 +8,7 @@ export default function Header() {
   const isHomePage = pathname === '/';
 
   return (
-    <header className="border-b border-gray-200 bg-white">
+    <header className="border-b border-gray-200 bg-white sticky top-0 z-50">
       <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <div className="p-2 bg-gray-900 rounded-lg">
