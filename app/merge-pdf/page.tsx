@@ -223,7 +223,7 @@ export default function MergePdfPage() {
             }}
             className="w-full mt-3 py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
           >
-            Start over with new files
+            Start over
           </button>
         </>
       )}

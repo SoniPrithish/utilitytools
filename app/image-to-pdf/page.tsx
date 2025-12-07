@@ -321,7 +321,7 @@ export default function ImageToPdfPage() {
             }}
             className="w-full mt-3 py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
           >
-            Start over with new images
+            Start over
           </button>
         </>
       )}

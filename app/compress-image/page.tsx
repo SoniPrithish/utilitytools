@@ -234,7 +234,7 @@ export default function CompressImagePage() {
             }}
             className="w-full mt-4 py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
           >
-            Compress more images
+            Start over
           </button>
         </div>
       )}
