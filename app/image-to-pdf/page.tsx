@@ -15,7 +15,7 @@ interface ImageFile {
 
 export default function ImageToPdfPage() {
   const [images, setImages] = useState<ImageFile[]>([]);
-  const [pageSize, setPageSize] = useState<'a4' | 'letter' | 'fit'>('a4');
+  const [pageSize, setPageSize] = useState<'a4' | 'letter' | 'fit'>('fit'); // default to fit to keep original dimensions
   const [orientation, setOrientation] = useState<'portrait' | 'landscape'>('portrait');
   const [isConverting, setIsConverting] = useState(false);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
@@ -90,7 +90,7 @@ export default function ImageToPdfPage() {
       let pdf: jsPDF;
       
       if (pageSize === 'fit') {
-        // Use first image dimensions for the PDF
+        // Use first image dimensions for the PDF, no scaling
         const firstImg = images[0];
         pdf = new jsPDF({
           orientation: firstImg.width > firstImg.height ? 'landscape' : 'portrait',
@@ -120,6 +120,7 @@ export default function ImageToPdfPage() {
         const pageHeight = pdf.internal.pageSize.getHeight();
 
         if (pageSize === 'fit') {
+          // No scaling, keep original pixel dimensions
           pdf.addImage(img.dataUrl, 'JPEG', 0, 0, pageWidth, pageHeight);
         } else {
           // Calculate aspect ratio to fit image on page with margins
@@ -239,38 +240,38 @@ export default function ImageToPdfPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Page Size
                 </label>
-                <div className="flex gap-4">
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      value="a4"
-                      checked={pageSize === 'a4'}
-                      onChange={() => setPageSize('a4')}
-                      className="mr-2"
-                    />
-                    <span className="text-sm text-gray-700">A4</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      value="letter"
-                      checked={pageSize === 'letter'}
-                      onChange={() => setPageSize('letter')}
-                      className="mr-2"
-                    />
-                    <span className="text-sm text-gray-700">Letter</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      value="fit"
-                      checked={pageSize === 'fit'}
-                      onChange={() => setPageSize('fit')}
-                      className="mr-2"
-                    />
-                    <span className="text-sm text-gray-700">Fit to Image</span>
-                  </label>
-                </div>
+              <div className="flex gap-4 flex-wrap">
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    value="fit"
+                    checked={pageSize === 'fit'}
+                    onChange={() => setPageSize('fit')}
+                    className="mr-2"
+                  />
+                  <span className="text-sm text-gray-700">Fit to Image (original size)</span>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    value="a4"
+                    checked={pageSize === 'a4'}
+                    onChange={() => setPageSize('a4')}
+                    className="mr-2"
+                  />
+                  <span className="text-sm text-gray-700">A4</span>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    value="letter"
+                    checked={pageSize === 'letter'}
+                    onChange={() => setPageSize('letter')}
+                    className="mr-2"
+                  />
+                  <span className="text-sm text-gray-700">Letter</span>
+                </label>
+              </div>
               </div>
 
               {pageSize !== 'fit' && (
