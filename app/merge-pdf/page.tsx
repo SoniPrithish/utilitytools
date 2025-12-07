@@ -92,10 +92,8 @@ export default function MergePdfPage() {
 
       const mergedPdfBytes = await mergedPdf.save(); // Uint8Array
       // Ensure we pass an ArrayBuffer to Blob to satisfy TS in strict builds
-      const mergedBuffer = mergedPdfBytes.buffer.slice(
-        mergedPdfBytes.byteOffset,
-        mergedPdfBytes.byteOffset + mergedPdfBytes.byteLength
-      );
+      // Create a fresh ArrayBuffer (avoids SharedArrayBuffer type union)
+      const mergedBuffer = new Uint8Array(mergedPdfBytes).buffer;
       const blob = new Blob([mergedBuffer], { type: 'application/pdf' });
       downloadFile(blob, 'merged.pdf');
     } catch (err) {
