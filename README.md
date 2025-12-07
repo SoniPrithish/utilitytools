@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# UtilityTools
+
+Fast, free browser-based utility tools for images and PDFs. All processing happens locally in your browser - no uploads to servers, maximum privacy.
+
+## Features
+
+### Image Tools
+- **Image Compressor** - Reduce image file size with adjustable quality and max width settings
+- **Image Format Converter** - Convert between PNG, JPG, and WebP formats with quality control
+
+### PDF Tools
+- **PDF to Image** - Convert PDF pages to high-quality PNG or JPG images
+- **Image to PDF** - Combine multiple images into a single PDF with page size options
+- **PDF Merger** - Merge multiple PDF files into one with drag-to-reorder
+
+## Tech Stack
+
+- **Next.js 14** - React framework with App Router
+- **TypeScript** - Type-safe development
+- **Tailwind CSS** - Utility-first styling
+- **Client-side Processing** - All files processed in browser
+
+### Libraries Used
+| Tool | Library |
+|------|---------|
+| Image Compression | `browser-image-compression` |
+| PDF to Image | `pdfjs-dist` |
+| Image to PDF | `jspdf` |
+| PDF Merger | `pdf-lib` |
+| ZIP Downloads | `jszip` |
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/SoniPrithish/utilitytools.git
+
+# Navigate to project directory
+cd utilitytools
+
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Production Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Build for production
+npm run build
 
-## Learn More
+# Start production server
+npm run start
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Deploy to Vercel
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The easiest way to deploy is using [Vercel](https://vercel.com):
 
-## Deploy on Vercel
+1. Push your code to GitHub
+2. Import the repository on [Vercel](https://vercel.com/new)
+3. Click Deploy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+No environment variables required - everything runs client-side!
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/SoniPrithish/utilitytools)
+
+## Privacy
+
+All file processing happens **entirely in your browser**. Your files are never uploaded to any server. This ensures:
+
+- Maximum privacy for sensitive documents
+- Faster processing (no upload/download time)
+- Works offline after initial page load
+- No file size limits imposed by servers
+
+## License
+
+MIT License - feel free to use this project for personal or commercial purposes.
+
+## Author
+
+Built by [Prithish Soni](https://github.com/SoniPrithish)
