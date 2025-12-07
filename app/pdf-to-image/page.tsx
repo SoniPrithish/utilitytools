@@ -203,14 +203,23 @@ export default function PdfToImagePage() {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-lg font-medium text-gray-900">Conversion Complete</h3>
-              <p className="text-sm text-gray-600">{pages.length} pages converted</p>
+              <p className="text-sm text-gray-600">{pages.length} page{pages.length > 1 ? 's' : ''} converted</p>
             </div>
-            <button
-              onClick={downloadAllAsZip}
-              className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
-            >
-              Download ZIP
-            </button>
+            {pages.length === 1 ? (
+              <button
+                onClick={() => downloadPage(pages[0])}
+                className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                Download Image
+              </button>
+            ) : (
+              <button
+                onClick={downloadAllAsZip}
+                className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                Download All (ZIP)
+              </button>
+            )}
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
