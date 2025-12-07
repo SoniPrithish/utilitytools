@@ -48,11 +48,14 @@ export default function CompressImagePage() {
         const file = files[i];
         const compressedFile = await imageCompression(file, options);
         
+        // Use original if compressed is larger (can happen with small/simple images)
+        const finalFile = compressedFile.size < file.size ? compressedFile : file;
+        
         compressed.push({
           original: file,
-          compressed: compressedFile,
+          compressed: finalFile,
           originalSize: file.size,
-          compressedSize: compressedFile.size,
+          compressedSize: finalFile.size,
         });
 
         setProgress(Math.round(((i + 1) / files.length) * 100));

@@ -73,10 +73,16 @@ export default function TestPage() {
 
       const compressed = await imageCompression(file, options);
       
-      if (compressed && compressed.size > 0) {
+      // Use original if compressed is larger
+      const finalFile = compressed.size < file.size ? compressed : file;
+      const saved = file.size - finalFile.size;
+      
+      if (finalFile && finalFile.size > 0) {
         updateResult(name, { 
           status: 'passed', 
-          message: `Original: ${(file.size / 1024).toFixed(1)}KB → Compressed: ${(compressed.size / 1024).toFixed(1)}KB`,
+          message: saved > 0 
+            ? `Original: ${(file.size / 1024).toFixed(1)}KB → Compressed: ${(finalFile.size / 1024).toFixed(1)}KB (saved ${(saved / 1024).toFixed(1)}KB)`
+            : `Original: ${(file.size / 1024).toFixed(1)}KB (already optimal, no compression needed)`,
           duration: Date.now() - start 
         });
       } else {
