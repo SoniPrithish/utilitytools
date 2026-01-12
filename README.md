@@ -6,9 +6,11 @@ Fast, free browser-based utility tools for images and PDFs. All processing happe
 
 ### Image Tools
 - **Image Compressor** - Reduce image file size with adjustable quality and max width settings
+- **Image Resizer** - Resize images by percentage or exact dimensions
 - **Image Format Converter** - Convert between PNG, JPG, and WebP formats with quality control
 
 ### PDF Tools
+- **Reduce PDF Size** - Compress PDFs with extreme, normal, or low compression levels
 - **PDF to Image** - Convert PDF pages to high-quality PNG or JPG images
 - **Image to PDF** - Combine multiple images into a single PDF with page size options
 - **PDF Merger** - Merge multiple PDF files into one with drag-to-reorder
