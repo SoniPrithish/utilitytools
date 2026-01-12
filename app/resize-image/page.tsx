@@ -15,12 +15,11 @@ interface ResizedImage {
     newHeight: number;
 }
 
-type ResizeMode = 'size' | 'percentage' | 'pixels';
+type ResizeMode = 'percentage' | 'pixels';
 
 export default function ResizeImagePage() {
     const [files, setFiles] = useState<File[]>([]);
     const [resizeMode, setResizeMode] = useState<ResizeMode>('percentage');
-    const [targetSizeKB, setTargetSizeKB] = useState(500);
     const [percentage, setPercentage] = useState(50);
     const [pixelWidth, setPixelWidth] = useState(800);
     const [pixelHeight, setPixelHeight] = useState(600);
@@ -98,64 +97,6 @@ export default function ResizeImagePage() {
         });
     };
 
-    // Resize to target file size using binary search
-    const resizeByFileSize = async (
-        img: HTMLImageElement,
-        targetSizeBytes: number
-    ): Promise<{ blob: Blob; dataUrl: string; width: number; height: number }> => {
-        let minScale = 0.1;
-        let maxScale = 1.0;
-        let bestResult: { blob: Blob; dataUrl: string; width: number; height: number } | null = null;
-
-        // Binary search for the right scale
-        for (let i = 0; i < 10; i++) {
-            const scale = (minScale + maxScale) / 2;
-            const width = Math.round(img.width * scale);
-            const height = Math.round(img.height * scale);
-
-            const canvas = document.createElement('canvas');
-            canvas.width = width;
-            canvas.height = height;
-
-            const ctx = canvas.getContext('2d');
-            if (!ctx) throw new Error('Failed to get canvas context');
-
-            ctx.drawImage(img, 0, 0, width, height);
-
-            // Try different quality levels
-            for (let quality = 0.9; quality >= 0.3; quality -= 0.1) {
-                const dataUrl = canvas.toDataURL('image/jpeg', quality);
-                const response = await fetch(dataUrl);
-                const blob = await response.blob();
-
-                if (blob.size <= targetSizeBytes) {
-                    bestResult = { blob, dataUrl, width, height };
-                    minScale = scale; // Try larger
-                    break;
-                }
-            }
-
-            if (!bestResult || bestResult.blob.size > targetSizeBytes) {
-                maxScale = scale; // Try smaller
-            }
-        }
-
-        if (!bestResult) {
-            // Fallback: return smallest possible
-            const canvas = document.createElement('canvas');
-            canvas.width = Math.round(img.width * 0.1);
-            canvas.height = Math.round(img.height * 0.1);
-            const ctx = canvas.getContext('2d')!;
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            const dataUrl = canvas.toDataURL('image/jpeg', 0.3);
-            const response = await fetch(dataUrl);
-            const blob = await response.blob();
-            bestResult = { blob, dataUrl, width: canvas.width, height: canvas.height };
-        }
-
-        return bestResult;
-    };
-
     const resizeImage = async (file: File): Promise<ResizedImage> => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -169,28 +110,14 @@ export default function ResizeImagePage() {
                         let newWidth: number;
                         let newHeight: number;
 
-                        switch (resizeMode) {
-                            case 'percentage':
-                                newWidth = Math.round(img.width * (percentage / 100));
-                                newHeight = Math.round(img.height * (percentage / 100));
-                                result = await resizeByDimensions(img, newWidth, newHeight);
-                                break;
-
-                            case 'pixels':
-                                newWidth = pixelWidth;
-                                newHeight = pixelHeight;
-                                result = await resizeByDimensions(img, newWidth, newHeight);
-                                break;
-
-                            case 'size':
-                                const sizeResult = await resizeByFileSize(img, targetSizeKB * 1024);
-                                newWidth = sizeResult.width;
-                                newHeight = sizeResult.height;
-                                result = { blob: sizeResult.blob, dataUrl: sizeResult.dataUrl };
-                                break;
-
-                            default:
-                                throw new Error('Invalid resize mode');
+                        if (resizeMode === 'percentage') {
+                            newWidth = Math.round(img.width * (percentage / 100));
+                            newHeight = Math.round(img.height * (percentage / 100));
+                            result = await resizeByDimensions(img, newWidth, newHeight);
+                        } else {
+                            newWidth = pixelWidth;
+                            newHeight = pixelHeight;
+                            result = await resizeByDimensions(img, newWidth, newHeight);
                         }
 
                         resolve({
@@ -270,7 +197,7 @@ export default function ResizeImagePage() {
             <div className="mb-8">
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">Resize Image</h1>
                 <p className="text-gray-600">
-                    Resize images by size, percentage, or exact dimensions. All processing happens locally in your browser.
+                    Resize images by percentage or exact dimensions. All processing happens locally in your browser.
                 </p>
             </div>
 
@@ -316,16 +243,7 @@ export default function ResizeImagePage() {
                                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                         }`}
                                 >
-                                    Pixels
-                                </button>
-                                <button
-                                    onClick={() => setResizeMode('size')}
-                                    className={`flex-1 py-2 px-4 text-sm font-medium rounded-lg transition-colors ${resizeMode === 'size'
-                                            ? 'bg-gray-900 text-white'
-                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                        }`}
-                                >
-                                    File Size
+                                    Width × Height
                                 </button>
                             </div>
                         </div>
@@ -402,40 +320,6 @@ export default function ResizeImagePage() {
                                 </div>
                                 <p className="text-xs text-gray-500">
                                     {lockAspectRatio ? '🔒 Aspect ratio locked' : '🔓 Aspect ratio unlocked'}
-                                </p>
-                            </div>
-                        )}
-
-                        {/* File Size Mode */}
-                        {resizeMode === 'size' && (
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Target Size (KB)
-                                </label>
-                                <div className="flex gap-2 mb-3">
-                                    {[100, 250, 500, 1000, 2000].map((size) => (
-                                        <button
-                                            key={size}
-                                            onClick={() => setTargetSizeKB(size)}
-                                            className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${targetSizeKB === size
-                                                    ? 'bg-gray-900 text-white'
-                                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                                }`}
-                                        >
-                                            {size >= 1000 ? `${size / 1000}MB` : `${size}KB`}
-                                        </button>
-                                    ))}
-                                </div>
-                                <input
-                                    type="number"
-                                    min="10"
-                                    max="10000"
-                                    value={targetSizeKB}
-                                    onChange={(e) => setTargetSizeKB(parseInt(e.target.value) || 100)}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                />
-                                <p className="text-xs text-gray-500 mt-1">
-                                    Image will be automatically scaled to fit the target size
                                 </p>
                             </div>
                         )}

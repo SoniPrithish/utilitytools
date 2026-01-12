@@ -215,8 +215,15 @@ export default function ReducePdfPage() {
               <label className="block text-sm font-medium text-gray-700 mb-3">
                 Compression Level
               </label>
+              {/* Show original file size */}
+              <div className="mb-3 p-2 bg-gray-100 rounded-lg">
+                <p className="text-sm text-gray-600">
+                  Original Size: <span className="font-medium text-gray-900">{formatFileSize(files.reduce((a, f) => a + f.size, 0))}</span>
+                  {files.length > 1 && <span className="text-gray-500"> ({files.length} files)</span>}
+                </p>
+              </div>
               <div className="space-y-2">
-                <label className="flex items-start gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                <label className={`flex items-start gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${compressionLevel === 'extreme' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:bg-gray-50'}`}>
                   <input
                     type="radio"
                     value="extreme"
@@ -224,12 +231,17 @@ export default function ReducePdfPage() {
                     onChange={() => setCompressionLevel('extreme')}
                     className="mt-1"
                   />
-                  <div>
-                    <span className="text-sm font-medium text-gray-900">Extreme</span>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-900">Extreme</span>
+                      <span className="text-sm font-medium text-green-600">
+                        ~{formatFileSize(Math.round(files.reduce((a, f) => a + f.size, 0) * 0.3))}
+                      </span>
+                    </div>
                     <p className="text-xs text-gray-500">Maximum compression, smaller file size. Best for archiving.</p>
                   </div>
                 </label>
-                <label className="flex items-start gap-3 p-3 border border-blue-500 bg-blue-50 rounded-lg cursor-pointer">
+                <label className={`flex items-start gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${compressionLevel === 'normal' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:bg-gray-50'}`}>
                   <input
                     type="radio"
                     value="normal"
@@ -237,13 +249,20 @@ export default function ReducePdfPage() {
                     onChange={() => setCompressionLevel('normal')}
                     className="mt-1"
                   />
-                  <div>
-                    <span className="text-sm font-medium text-gray-900">Normal</span>
-                    <span className="ml-2 px-2 py-0.5 text-xs bg-blue-100 text-blue-700 rounded">Recommended</span>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="text-sm font-medium text-gray-900">Normal</span>
+                        <span className="ml-2 px-2 py-0.5 text-xs bg-blue-100 text-blue-700 rounded">Recommended</span>
+                      </div>
+                      <span className="text-sm font-medium text-green-600">
+                        ~{formatFileSize(Math.round(files.reduce((a, f) => a + f.size, 0) * 0.5))}
+                      </span>
+                    </div>
                     <p className="text-xs text-gray-500">Balanced compression for most use cases.</p>
                   </div>
                 </label>
-                <label className="flex items-start gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                <label className={`flex items-start gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${compressionLevel === 'low' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:bg-gray-50'}`}>
                   <input
                     type="radio"
                     value="low"
@@ -251,8 +270,13 @@ export default function ReducePdfPage() {
                     onChange={() => setCompressionLevel('low')}
                     className="mt-1"
                   />
-                  <div>
-                    <span className="text-sm font-medium text-gray-900">Low</span>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-900">Low</span>
+                      <span className="text-sm font-medium text-green-600">
+                        ~{formatFileSize(Math.round(files.reduce((a, f) => a + f.size, 0) * 0.75))}
+                      </span>
+                    </div>
                     <p className="text-xs text-gray-500">Minimal compression, highest quality. Best for printing.</p>
                   </div>
                 </label>
