@@ -56,6 +56,8 @@ Live at **[prithish.me](https://prithish.me)**.
 4. **Packaging & delivery:** Results stream to the user with `downloadFile`; multi-file outputs are zipped with `jszip`.
 5. **Safety:** If compression inflates size or a PDF is problematic, the original is returned to avoid regressions.
 6. **Diagram suggestion:** Input (FileDropzone) → Processing pipeline (per tool) → Optional ZIP packaging → Browser download.
+- Visual:
+  ![High-level architecture of UtilityTools showing client-only processing flow](https://github.com/user-attachments/assets/1745b9f4-5fa4-4290-867a-2e7acd3428fc)
 
 ---
 
