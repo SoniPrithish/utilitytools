@@ -4,6 +4,13 @@ UtilityTools transforms PDFs and images in seconds with zero uploads. It’s bui
 
 Live at **[prithish.me](https://prithish.me)**.
 
+**Quick links:** [Demo](#-demo) · [Architecture](#-architecture--how-it-works) · [Run locally](#-how-to-run) · [Roadmap](#-future-improvements)
+
+**At a glance**
+- Browser-only processing: zero data leaves the device.
+- Batch-friendly: up to 20 PDFs with progress, ZIP exports where it helps.
+- Typical outcomes: 5 MB JPG → ~0.9 MB in ~0.8s; 10-page PDF → PNGs in ~6s; 20-file PDF batch completes in <30s.
+
 ---
 
 ## 🚀 Overview
