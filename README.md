@@ -1,83 +1,90 @@
-# UtilityTools
+# UtilityTools — A Prithish Soni Project
 
-Fast, free browser-based utility tools for images and PDFs. All processing happens locally in your browser - no uploads to servers, maximum privacy.
+UtilityTools is my personal utility suite for fast image and PDF workflows on the web.
 
-## Features
+Live at **[prithish.me](https://prithish.me)**.
 
-### Image Tools
-- **Image Compressor** - Reduce image file size with adjustable quality and max width settings
-- **Image Resizer** - Resize images by percentage or exact dimensions
-- **Image Format Converter** - Convert between PNG, JPG, and WebP formats with quality control
+---
 
-### PDF Tools
-- **Reduce PDF Size** - Compress PDFs with extreme, normal, or low compression levels
-- **PDF to Image** - Convert PDF pages to high-quality PNG or JPG images
-- **Image to PDF** - Combine multiple images into a single PDF with page size options
-- **PDF Merger** - Merge multiple PDF files into one with drag-to-reorder
+## Why this project exists
 
-## Tech Stack
+I wanted a clean, reliable set of tools that are:
 
-- **Next.js 14** - React framework with App Router
-- **TypeScript** - Type-safe development
-- **Tailwind CSS** - Utility-first styling
-- **Client-side Processing** - All files processed in browser
+- Fast to use
+- Private by default
+- Simple for anyone to access from a browser
 
-### Libraries Used
-| Tool | Library |
-|------|---------|
+Every core operation runs client-side, so your files stay with you.
+
+---
+
+## What you can do
+
+### Image tools
+- **Image Compressor** — Reduce image size with adjustable quality and max width
+- **Image Resizer** — Resize by percentage or exact dimensions
+- **Image Format Converter** — Convert between PNG, JPG, and WebP
+
+### PDF tools
+- **Reduce PDF Size** — Compress PDFs with multiple compression levels
+- **PDF to Image** — Convert PDF pages to PNG or JPG
+- **Image to PDF** — Combine images into a single PDF
+- **PDF Merger** — Merge PDFs with drag-and-drop ordering
+
+---
+
+## Tech stack
+
+- **Next.js**
+- **TypeScript**
+- **Tailwind CSS**
+- **Client-side file processing**
+
+### Core libraries
+| Capability | Library |
+|------------|---------|
 | Image Compression | `browser-image-compression` |
 | PDF to Image | `pdfjs-dist` |
 | Image to PDF | `jspdf` |
 | PDF Merger | `pdf-lib` |
 | ZIP Downloads | `jszip` |
 
-## Getting Started
+---
+
+## Local development
 
 ### Prerequisites
-- Node.js 18+ 
-- npm or yarn
+- Node.js 18+
+- npm
 
-### Installation
-
+### Setup
 ```bash
-# Clone the repository
 git clone https://github.com/SoniPrithish/utilitytools.git
-
-# Navigate to project directory
 cd utilitytools
-
-# Install dependencies
 npm install
-
-# Run development server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000).
 
-### Production Build
-
+### Production
 ```bash
-# Build for production
 npm run build
-
-# Start production server
 npm run start
 ```
 
+---
+
 ## Privacy
 
-All file processing happens **entirely in your browser**. Your files are never uploaded to any server. This ensures:
+Files are processed in your browser and are not uploaded to a backend for conversion.
 
-- Maximum privacy for sensitive documents
-- Faster processing (no upload/download time)
-- Works offline after initial page load
-- No file size limits imposed by servers
+---
 
 ## License
 
-MIT License - feel free to use this project for personal or commercial purposes.
+MIT
 
-## Author
+---
 
 Built by [Prithish Soni](https://github.com/SoniPrithish)
