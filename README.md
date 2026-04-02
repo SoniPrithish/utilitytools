@@ -62,6 +62,8 @@ Live at **[prithish.me](https://prithish.me)**.
 
 ## 📸 Demo
 - Live: **[prithish.me](https://prithish.me)**
+- Preview:
+  ![UtilityTools UI preview showing PDF and image workflows](https://github.com/user-attachments/assets/e629f0ab-fa92-4060-a770-e0f3643939f3)
 - Suggested visuals: GIF of PDF merge drag-and-drop, screenshot of PDF ➜ Image settings (format + scale), and a before/after file-size callout for compression.
 
 ---
