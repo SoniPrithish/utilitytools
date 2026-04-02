@@ -41,7 +41,7 @@ Every core operation runs client-side, so your files stay with you.
 - **Client-side file processing**
 
 ### Core libraries
-| Capability | Library |
+| Tool | Library |
 |------------|---------|
 | Image Compression | `browser-image-compression` |
 | PDF to Image | `pdfjs-dist` |
