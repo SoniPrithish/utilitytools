@@ -523,15 +523,31 @@ export default function ExtractPdfPagesPage() {
                     key={pageNumber}
                     data-page-number={pageNumber}
                     ref={(node) => registerPageNode(pageNumber, node)}
+                    role="button"
+                    tabIndex={0}
+                    aria-pressed={isSelected}
+                    onClick={() => togglePageSelection(pageNumber)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        togglePageSelection(pageNumber);
+                      }
+                    }}
                     className={`relative border rounded-lg overflow-hidden transition-colors ${
-                      isSelected ? 'border-blue-500 ring-1 ring-blue-500' : 'border-gray-200'
+                      isSelected
+                        ? 'border-blue-500 ring-1 ring-blue-500 cursor-pointer'
+                        : 'border-gray-200 cursor-pointer'
                     }`}
                   >
-                    <label className="absolute top-2 left-2 z-10 inline-flex items-center gap-1.5 px-2 py-1 bg-white/90 rounded-md text-xs font-medium text-gray-800">
+                    <label
+                      onClick={(event) => event.stopPropagation()}
+                      className="absolute top-2 left-2 z-10 inline-flex items-center gap-1.5 px-2 py-1 bg-white/90 rounded-md text-xs font-medium text-gray-800"
+                    >
                       <input
                         type="checkbox"
                         checked={isSelected}
                         onChange={() => togglePageSelection(pageNumber)}
+                        onClick={(event) => event.stopPropagation()}
                         className="w-3.5 h-3.5"
                       />
                       P{pageNumber}
