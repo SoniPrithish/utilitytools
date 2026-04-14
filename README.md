@@ -4,7 +4,6 @@ UtilityTools transforms PDFs and images in seconds with zero uploads. It’s bui
 
 Live at **[prithish.me](https://prithish.me)**.
 
-
 **At a glance**
 - Browser-only processing: zero data leaves the device.
 - Batch-friendly: up to 20 PDFs with progress, ZIP exports where it helps.
@@ -23,6 +22,7 @@ Live at **[prithish.me](https://prithish.me)**.
 - PDF merge with drag-to-reorder, page counting, and batch clearing (up to 20 files).
 - PDF compression profiles (extreme/normal/low) that strip metadata, downsample selectively, and fall back to the original when compression would bloat size.
 - PDF ➜ Image converter with DPI scaling (1x–4x), PNG/JPEG output, and per-page or ZIP downloads.
+- PDF page extractor with thumbnail preview, range selection (e.g., 3-4,7), and combined/per-page exports.
 - Image compressor/resizer with target quality & dimensions plus PNG/JPEG/WebP conversion.
 - Image ➜ PDF builder that stitches multiple images into a single doc with consistent ordering.
 - ZIP bundling for multi-output flows (PDF to Image, batch compress) via `jszip`.

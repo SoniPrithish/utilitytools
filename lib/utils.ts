@@ -16,7 +16,8 @@ export function downloadFile(blob: Blob, filename: string): void {
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  // Delay revoke to avoid race conditions where some browsers cancel the download.
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 export function getFileExtension(filename: string): string {
