@@ -144,11 +144,14 @@ export default function MarkdownPdfPage() {
         </p>
       </div>
 
-      <div className="mb-6 grid grid-cols-2 gap-1 rounded-lg bg-gray-100 p-1" role="tablist" aria-label="Conversion direction">
+      <div
+        className="mb-6 grid grid-cols-2 gap-1 rounded-lg bg-gray-100 p-1"
+        role="group"
+        aria-label="Conversion direction"
+      >
         <button
           type="button"
-          role="tab"
-          aria-selected={isMarkdownMode}
+          aria-pressed={isMarkdownMode}
           onClick={() => handleModeChange('markdown-to-pdf')}
           className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
             isMarkdownMode ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:text-gray-900'
@@ -158,8 +161,7 @@ export default function MarkdownPdfPage() {
         </button>
         <button
           type="button"
-          role="tab"
-          aria-selected={!isMarkdownMode}
+          aria-pressed={!isMarkdownMode}
           onClick={() => handleModeChange('pdf-to-markdown')}
           className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
             !isMarkdownMode ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:text-gray-900'
