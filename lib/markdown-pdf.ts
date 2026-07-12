@@ -54,28 +54,78 @@ export function renderMarkdownToHtml(markdown: string): string {
 }
 
 export async function createPdfFromMarkdown(element: HTMLElement): Promise<Blob> {
+  const { default: html2canvas } = await import('html2canvas');
   const pdf = new jsPDF({
     unit: 'mm',
     format: 'a4',
     orientation: 'portrait',
   });
 
-  await new Promise<void>((resolve) => {
-    pdf.html(element, {
-      callback: () => resolve(),
-      margin: [18, 18, 18, 18],
-      autoPaging: 'text',
-      x: 18,
-      y: 18,
-      width: 174,
-      windowWidth: Math.max(element.scrollWidth, 720),
-      html2canvas: {
-        backgroundColor: '#ffffff',
-        scale: 1.25,
-        useCORS: false,
-      },
-    });
+  const margin = 18;
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  const contentWidth = pageWidth - margin * 2;
+  const contentHeight = pageHeight - margin * 2;
+  const renderWidth = Math.max(element.clientWidth, 1);
+
+  // Render the same styled DOM used by the preview, then slice the bitmap at
+  // exact A4 boundaries. This avoids jsPDF's CSS parser changing font sizes
+  // and splitting individual text fragments across unrelated pages.
+  const canvas = await html2canvas(element, {
+    backgroundColor: '#ffffff',
+    height: Math.max(element.scrollHeight, 1),
+    logging: false,
+    scale: 2,
+    useCORS: false,
+    width: renderWidth,
+    windowHeight: Math.max(element.scrollHeight, 1),
+    windowWidth: renderWidth,
   });
+
+  const pageHeightPixels = Math.max(
+    1,
+    Math.floor((contentHeight / contentWidth) * canvas.width),
+  );
+  const pageCount = Math.max(1, Math.ceil(canvas.height / pageHeightPixels));
+
+  for (let pageIndex = 0; pageIndex < pageCount; pageIndex += 1) {
+    if (pageIndex > 0) pdf.addPage();
+
+    const sourceY = pageIndex * pageHeightPixels;
+    const sliceHeight = Math.min(pageHeightPixels, canvas.height - sourceY);
+    const pageCanvas = document.createElement('canvas');
+    pageCanvas.width = canvas.width;
+    pageCanvas.height = sliceHeight;
+
+    const context = pageCanvas.getContext('2d');
+    if (!context) throw new Error('Unable to prepare the PDF page.');
+
+    context.fillStyle = '#ffffff';
+    context.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+    context.drawImage(
+      canvas,
+      0,
+      sourceY,
+      canvas.width,
+      sliceHeight,
+      0,
+      0,
+      pageCanvas.width,
+      pageCanvas.height,
+    );
+
+    const imageHeight = (sliceHeight / canvas.width) * contentWidth;
+    pdf.addImage(
+      pageCanvas.toDataURL('image/png'),
+      'PNG',
+      margin,
+      margin,
+      contentWidth,
+      imageHeight,
+      undefined,
+      'FAST',
+    );
+  }
 
   return pdf.output('blob');
 }
