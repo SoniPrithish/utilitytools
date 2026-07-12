@@ -15,3 +15,143 @@ body {
   background: var(--background);
   color: var(--foreground);
 }
+
+.markdown-document {
+  color: #374151;
+  font-size: 15px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.markdown-document > *:first-child {
+  margin-top: 0;
+}
+
+.markdown-document > *:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-document h1,
+.markdown-document h2,
+.markdown-document h3,
+.markdown-document h4,
+.markdown-document h5,
+.markdown-document h6 {
+  color: #111827;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 1.5em 0 0.55em;
+}
+
+.markdown-document h1 {
+  font-size: 2em;
+}
+
+.markdown-document h2 {
+  font-size: 1.55em;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.3em;
+}
+
+.markdown-document h3 {
+  font-size: 1.25em;
+}
+
+.markdown-document p,
+.markdown-document ul,
+.markdown-document ol,
+.markdown-document blockquote,
+.markdown-document pre,
+.markdown-document table,
+.markdown-document hr {
+  margin: 1em 0;
+}
+
+.markdown-document ul,
+.markdown-document ol {
+  padding-left: 1.5em;
+}
+
+.markdown-document ul {
+  list-style: disc;
+}
+
+.markdown-document ol {
+  list-style: decimal;
+}
+
+.markdown-document li + li {
+  margin-top: 0.35em;
+}
+
+.markdown-document a {
+  color: #2563eb;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.markdown-document strong {
+  color: #111827;
+  font-weight: 700;
+}
+
+.markdown-document code {
+  background: #f3f4f6;
+  border-radius: 4px;
+  color: #1f2937;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.9em;
+  padding: 0.15em 0.35em;
+}
+
+.markdown-document pre {
+  background: #111827;
+  border-radius: 8px;
+  color: #f9fafb;
+  overflow-x: auto;
+  padding: 1em;
+}
+
+.markdown-document pre code {
+  background: transparent;
+  color: inherit;
+  font-size: 0.88em;
+  padding: 0;
+}
+
+.markdown-document blockquote {
+  border-left: 4px solid #d1d5db;
+  color: #6b7280;
+  padding-left: 1em;
+}
+
+.markdown-document hr {
+  border: 0;
+  border-top: 1px solid #d1d5db;
+}
+
+.markdown-document table {
+  border-collapse: collapse;
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  width: 100%;
+}
+
+.markdown-document th,
+.markdown-document td {
+  border: 1px solid #d1d5db;
+  padding: 0.55em 0.75em;
+  text-align: left;
+}
+
+.markdown-document th {
+  background: #f3f4f6;
+  color: #111827;
+  font-weight: 600;
+}
+
+.markdown-document input[type='checkbox'] {
+  accent-color: #2563eb;
+  margin-right: 0.45em;
+}

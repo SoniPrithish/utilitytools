@@ -23,6 +23,7 @@ Live at **[prithish.me](https://prithish.me)**.
 - PDF compression profiles (extreme/normal/low) that strip metadata, downsample selectively, and fall back to the original when compression would bloat size.
 - PDF ➜ Image converter with DPI scaling (1x–4x), PNG/JPEG output, and per-page or ZIP downloads.
 - PDF page extractor with thumbnail preview, range selection (e.g., 3-4,7), and combined/per-page exports.
+- Markdown to PDF and selectable-text PDF to Markdown conversion with styled previews and local processing.
 - Image compressor/resizer with target quality & dimensions plus PNG/JPEG/WebP conversion.
 - Image ➜ PDF builder that stitches multiple images into a single doc with consistent ordering.
 - ZIP bundling for multi-output flows (PDF to Image, batch compress) via `jszip`.
@@ -31,7 +32,7 @@ Live at **[prithish.me](https://prithish.me)**.
 
 ## ⚙️ Tech Stack
 - **Frontend:** Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4.
-- **File processing:** `pdf-lib` (merge/compress), `pdfjs-dist` (render pages), `browser-image-compression`, Canvas pipelines, `jspdf`, `jszip`.
+- **File processing:** `pdf-lib` (merge/compress), `pdfjs-dist` (render pages and extract text), `browser-image-compression`, `marked`, `dompurify`, Canvas pipelines, `jspdf`, `html2canvas`, `jszip`.
 - **Analytics:** Vercel Analytics for lightweight engagement signals.
 - **Infra:** Static Next.js deployment at `https://prithish.me`—no backend services required.
 
