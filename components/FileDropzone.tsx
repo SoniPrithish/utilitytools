@@ -8,6 +8,7 @@ interface FileDropzoneProps {
   multiple?: boolean;
   maxFiles?: number;
   onFilesSelected: (files: File[]) => void;
+  onFilesCleared?: () => void;
   label?: string;
   sublabel?: string;
 }
@@ -17,6 +18,7 @@ export default function FileDropzone({
   multiple = false,
   maxFiles = 10,
   onFilesSelected,
+  onFilesCleared,
   label = 'Drop files here',
   sublabel = 'or click to browse',
 }: FileDropzoneProps) {
@@ -67,6 +69,7 @@ export default function FileDropzone({
 
   const clearFiles = () => {
     setSelectedFiles([]);
+    onFilesCleared?.();
     if (inputRef.current) {
       inputRef.current.value = '';
     }

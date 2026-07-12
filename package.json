@@ -11,8 +11,11 @@
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
     "browser-image-compression": "^2.0.2",
+    "dompurify": "^3.4.12",
+    "html2canvas": "^1.4.1",
     "jspdf": "^3.0.4",
     "jszip": "^3.10.1",
+    "marked": "^18.0.6",
     "next": "16.0.7",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^5.4.449",

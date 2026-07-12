@@ -42,6 +42,17 @@ const tools = [
     ),
   },
   {
+    title: 'Markdown ↔ PDF',
+    description: 'Convert Markdown files to styled PDFs and selectable-text PDFs back to Markdown.',
+    href: '/markdown-pdf',
+    icon: (
+      <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a2 2 0 012-2h7l7 7v9a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 13l2-2 2 2 2-2 2 2M8 17h8" />
+      </svg>
+    ),
+  },
+  {
     title: 'Merge PDFs',
     description: 'Combine multiple PDF files into one. Drag to reorder.',
     href: '/merge-pdf',
